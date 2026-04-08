@@ -1,8 +1,8 @@
 
 
 from django.shortcuts import render, redirect
-from .models import User
-from .forms import UserForm
+from .models import User,Role
+from .forms import UserForm,RoleForm
 
 def users(request):
     # получим всех пользователей из базы
@@ -21,3 +21,17 @@ def add_user(request):
         form = UserForm()
     
     return render(request, "add_user.html", {'form': form})
+
+def main(request):
+    return render(request, 'base.html', {'page': 'main'})
+
+def add_role(request):
+    if request.method == "POST":
+        form = RoleForm(request.POST)  
+        if form.is_valid():
+            form.save()
+            return redirect('/users/')
+    else:
+        form = RoleForm()
+    
+    return render(request, "add_role.html", {'form': form})

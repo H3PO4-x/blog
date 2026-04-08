@@ -22,4 +22,6 @@ urlpatterns = [
     #path('admin/', admin.site.urls),
     path('add_user/',views.add_user),
     path('users/',views.users),
+    path('', views.main),
+    path('add_role/', views.add_role),
 ]

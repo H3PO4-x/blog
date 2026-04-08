@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %} Добавление роли {% endblock title %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            {{ form }}
+        </table>
+        <input type="submit" value="Добавить">
+    </form>
+{% endblock content %}
