@@ -1,41 +1,39 @@
-
-
 from django.shortcuts import render, redirect
-from .models import User,Role
-from .forms import UserForm,RoleForm
+from .models import User, Role
+from .forms import UserForm, RoleForm
+from .decorators import login_required, is_director, is_meneger
 
+
+#страница со списком пользователей
+@login_required
 def users(request):
-    # получим всех пользователей из базы
+    #получим всех пользователей из базы
     users = User.objects.all()
-    return render(request, 'users.html', {'users': users})
+    id = request.session.get('user_id')
+    u = User.objects.get(id=id)
+    return render(request, 'users.html', {'users': users, 'user':u ,'page': 'users'})
 
+# Create your views here.
 def add_user(request):
-
     if request.method == "POST":
-
-        user = UserForm(request.POST)
-        if user.is_valid():
-            user.save()
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
             return redirect('/users/')
     else:
         form = UserForm()
+    return render(request, "add_user.html", {'form': form, 'page': 'register'})
+
     
-    return render(request, "add_user.html", {'form': form})
-
-def main(request):
-    return render(request, 'base.html', {'page': 'main'})
-
 def add_role(request):
     if request.method == "POST":
-        form = RoleForm(request.POST)  
+        form = RoleForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('/users/')
     else:
         form = RoleForm()
-    
-    return render(request, "add_role.html", {'form': form})
-
+    return render(request, "add_role.html", {'form': form, 'page': 'add_role'})
 
 def index(request):
     if request.session.get('user_id'):
@@ -67,3 +65,15 @@ def login(request):
 def logout_view(request):
     request.session.flush()
     return redirect('/login', {'page': 'logout'})
+
+@login_required
+def for_authorized(request):
+    return render(request, 'page_for_authorized.html')
+
+@is_director
+def for_director(request):
+    return render(request, 'page_for_director.html')
+
+@is_meneger
+def for_meneger(request):
+    return render(request, 'page_for_meneger.html')

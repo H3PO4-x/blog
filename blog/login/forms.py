@@ -3,7 +3,7 @@ from django import forms
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['login', 'password', 'first_name', 'last_name', 'age']
+        fields = ['login', 'password', 'first_name', 'last_name', 'age','role']
         labels = {
             'login': 'Логин',
             'password': 'Пароль',
